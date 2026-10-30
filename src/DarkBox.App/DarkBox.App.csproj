@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>DarkBox</AssemblyName>
+    <ApplicationIcon>..\..\Resources\_DarkBoxIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DarkBox.Core\DarkBox.Core.csproj" />
+    <ProjectReference Include="..\DarkBox.Data\DarkBox.Data.csproj" />
+    <ProjectReference Include="..\DarkBox.Export\DarkBox.Export.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="..\..\Resources\DarkBoxLogin.png" Link="Assets\DarkBoxLogin.png" />
+    <Resource Include="..\..\Resources\_DarkBoxIcon.png" Link="Assets\DarkBoxIcon.png" />
+    <Resource Include="..\..\Resources\_DarkBoxIcon.ico" Link="Assets\DarkBoxIcon.ico" />
+  </ItemGroup>
+
+</Project>
