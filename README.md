@@ -12,11 +12,14 @@ Aplicación de escritorio WPF en desarrollo activo. La bóveda se guarda localme
 
 - Crear y desbloquear una bóveda local con contraseña maestra.
 - Añadir, editar, eliminar y consultar credenciales.
-- Copiar usuario o contraseña al portapapeles con borrado automático a los 30 segundos.
+- Copiar usuario o contraseña al portapapeles con borrado automático configurable.
 - Mostrar u ocultar contraseñas.
 - Exportar todas las credenciales, o una seleccionada, a PDF.
+- Exportar la bóveda a un archivo `.darkbox` cifrado e importarlo en otro equipo.
+- Gestionar bóvedas: la primera es la administradora; permite renombrar y eliminar bóvedas secundarias.
+- Ajustes de portapapeles, auto-bloqueo y confirmación de borrado.
 - Bloquear la bóveda y limpiar la sesión en memoria.
-- Interfaz oscura en español.
+- Interfaz oscura en español con ventana y controles personalizados.
 
 ## Seguridad
 
@@ -25,12 +28,15 @@ Aplicación de escritorio WPF en desarrollo activo. La bóveda se guarda localme
 - Clave de bóveda aleatoria, envuelta con la clave derivada de la contraseña maestra.
 - Cada credencial se cifra por separado con datos asociados al usuario y al elemento.
 - La contraseña maestra nunca se guarda en texto plano.
+- SQLite se ejecuta con `PRAGMA secure_delete = ON` para sobrescribir registros eliminados.
+- Los archivos `.darkbox` se cifran con AES-256-GCM y una contraseña de exportación derivada con PBKDF2-SHA256.
 
 Limitaciones actuales:
 
 - La base SQLite completa todavía no usa SQLCipher; los campos sensibles de las credenciales sí están cifrados, pero el archivo local no debe compartirse.
 - No existe recuperación de contraseña maestra. Si se pierde, la bóveda no se puede descifrar.
 - No hay sincronización en la nube ni llavero USB.
+- .NET no permite impedir por completo la descompilación de un ejecutable. La publicación en Release omite símbolos de depuración, pero un atacante con acceso al archivo puede analizarlo; la seguridad real depende de la contraseña maestra y del cifrado, no del ejecutable.
 
 ## Requisitos
 
@@ -68,7 +74,7 @@ $env:SELF_CONTAINED = "true"
 dotnet test DarkBox.sln -c Debug
 ```
 
-La suite cubre criptografía, repositorios y exportación a PDF.
+La suite cubre criptografía, exportación `.darkbox`, repositorios y exportación a PDF.
 
 ## Estructura
 
@@ -89,6 +95,7 @@ dist/                Salida publicada (no se sube al repositorio)
 La aplicación guarda sus datos fuera del repositorio:
 
 - Base de datos: `%LOCALAPPDATA%\DarkBox\darkbox.db`
+- Ajustes: `%LOCALAPPDATA%\DarkBox\settings.json`
 - Registro de fallos: `%LOCALAPPDATA%\DarkBox\crash.log`
 
 ## Qué no subir a GitHub
@@ -98,6 +105,7 @@ Nunca subas al repositorio:
 - `darkbox.db`, `*.db-wal` o `*.db-shm`.
 - `crash.log` ni ningún `*.log`.
 - PDFs exportados desde la bóveda.
+- Archivos `.darkbox` exportados desde la bóveda.
 - `bin/`, `obj/`, `.vs/`, `TestResults/` ni `dist/`.
 - Certificados, claves privadas, archivos `.env` o secretos.
 - Capturas o documentos con credenciales reales.
