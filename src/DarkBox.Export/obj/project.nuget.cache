@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "+Loa1YXLwJE=",
+  "success": true,
+  "projectFilePath": "D:\\FreezeezyPeak project dream\\Games - AppsPC - Webs - Mods - Extenciones - AppsCell\\Apps\\1- Dark Box\\DarkBox\\src\\DarkBox.Export\\DarkBox.Export.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\JarvioL-1\\AppData\\Local\\Temp\\cursor-sandbox-cache\\fe0fde2705975dbe5edf00bd22ca5ac4\\nuget\\microsoft.extensions.dependencyinjection.abstractions\\8.0.2\\microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\JarvioL-1\\AppData\\Local\\Temp\\cursor-sandbox-cache\\fe0fde2705975dbe5edf00bd22ca5ac4\\nuget\\microsoft.extensions.logging.abstractions\\8.0.3\\microsoft.extensions.logging.abstractions.8.0.3.nupkg.sha512",
+    "C:\\Users\\JarvioL-1\\AppData\\Local\\Temp\\cursor-sandbox-cache\\fe0fde2705975dbe5edf00bd22ca5ac4\\nuget\\pdfsharp\\6.2.4\\pdfsharp.6.2.4.nupkg.sha512",
+    "C:\\Users\\JarvioL-1\\AppData\\Local\\Temp\\cursor-sandbox-cache\\fe0fde2705975dbe5edf00bd22ca5ac4\\nuget\\system.security.cryptography.pkcs\\8.0.2\\system.security.cryptography.pkcs.8.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}
