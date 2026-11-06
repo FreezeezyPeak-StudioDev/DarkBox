@@ -1,12 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "BByBXk5MUXA=",
+  "dgSpecHash": "wc+3XQIJD40=",
   "success": true,
   "projectFilePath": "D:\\FreezeezyPeak project dream\\Games - AppsPC - Webs - Mods - Extenciones - AppsCell\\Apps\\1- Dark Box\\DarkBox\\src\\DarkBox.Core\\DarkBox.Core.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\JarvioL-1\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\8.0.30\\microsoft.netcore.app.runtime.win-x64.8.0.30.nupkg.sha512",
-    "C:\\Users\\JarvioL-1\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\8.0.30\\microsoft.windowsdesktop.app.runtime.win-x64.8.0.30.nupkg.sha512",
-    "C:\\Users\\JarvioL-1\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\8.0.30\\microsoft.aspnetcore.app.runtime.win-x64.8.0.30.nupkg.sha512"
-  ],
+  "expectedPackageFiles": [],
   "logs": []
 }

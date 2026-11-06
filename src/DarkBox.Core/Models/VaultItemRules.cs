@@ -10,13 +10,16 @@ public static class VaultItemRules
 
     public static string? Validate(VaultItemPayload payload)
     {
+        ArgumentNullException.ThrowIfNull(payload);
+
         if (string.IsNullOrWhiteSpace(payload.Service))
             return "El servicio es obligatorio.";
 
         if (payload.Service.Trim().Length > MaxServiceLength)
             return $"El servicio no puede superar los {MaxServiceLength} caracteres.";
 
-        if (payload.Username.Length > MaxUsernameLength)
+        var usernameLength = payload.Username is null ? 0 : payload.Username.Length;
+        if (usernameLength > MaxUsernameLength)
             return $"El usuario no puede superar los {MaxUsernameLength} caracteres.";
 
         if (string.IsNullOrEmpty(payload.Password))
