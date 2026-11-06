@@ -37,7 +37,7 @@ public sealed class DarkBoxDatabase
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "PRAGMA foreign_keys = ON; PRAGMA busy_timeout = 5000;";
+        command.CommandText = "PRAGMA foreign_keys = ON; PRAGMA busy_timeout = 5000; PRAGMA secure_delete = ON;";
         command.ExecuteNonQuery();
 
         return connection;
@@ -55,6 +55,9 @@ public sealed class DarkBoxDatabase
         {
             versionCommand.CommandText = "PRAGMA user_version;";
             var version = Convert.ToInt32(versionCommand.ExecuteScalar(), CultureInfo.InvariantCulture);
+
+            if (version < 0)
+                throw new InvalidOperationException("La versión de la base de datos no es válida.");
 
             if (version > SchemaVersion)
                 throw new InvalidOperationException(

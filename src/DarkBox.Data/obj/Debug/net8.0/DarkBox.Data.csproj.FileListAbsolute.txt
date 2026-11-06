@@ -1,0 +1,15 @@
+D:\FreezeezyPeak project dream\Games - AppsPC - Webs - Mods - Extenciones - AppsCell\Apps\1- Dark Box\DarkBox\src\DarkBox.Data\bin\Debug\net8.0\DarkBox.Data.deps.json
+D:\FreezeezyPeak project dream\Games - AppsPC - Webs - Mods - Extenciones - AppsCell\Apps\1- Dark Box\DarkBox\src\DarkBox.Data\bin\Debug\net8.0\DarkBox.Data.dll
+D:\FreezeezyPeak project dream\Games - AppsPC - Webs - Mods - Extenciones - AppsCell\Apps\1- Dark Box\DarkBox\src\DarkBox.Data\bin\Debug\net8.0\DarkBox.Data.pdb
+D:\FreezeezyPeak project dream\Games - AppsPC - Webs - Mods - Extenciones - AppsCell\Apps\1- Dark Box\DarkBox\src\DarkBox.Data\bin\Debug\net8.0\DarkBox.Core.dll
+D:\FreezeezyPeak project dream\Games - AppsPC - Webs - Mods - Extenciones - AppsCell\Apps\1- Dark Box\DarkBox\src\DarkBox.Data\bin\Debug\net8.0\DarkBox.Core.pdb
+D:\FreezeezyPeak project dream\Games - AppsPC - Webs - Mods - Extenciones - AppsCell\Apps\1- Dark Box\DarkBox\src\DarkBox.Data\obj\Debug\net8.0\DarkBox.Data.csproj.AssemblyReference.cache
+D:\FreezeezyPeak project dream\Games - AppsPC - Webs - Mods - Extenciones - AppsCell\Apps\1- Dark Box\DarkBox\src\DarkBox.Data\obj\Debug\net8.0\DarkBox.Data.GeneratedMSBuildEditorConfig.editorconfig
+D:\FreezeezyPeak project dream\Games - AppsPC - Webs - Mods - Extenciones - AppsCell\Apps\1- Dark Box\DarkBox\src\DarkBox.Data\obj\Debug\net8.0\DarkBox.Data.AssemblyInfoInputs.cache
+D:\FreezeezyPeak project dream\Games - AppsPC - Webs - Mods - Extenciones - AppsCell\Apps\1- Dark Box\DarkBox\src\DarkBox.Data\obj\Debug\net8.0\DarkBox.Data.AssemblyInfo.cs
+D:\FreezeezyPeak project dream\Games - AppsPC - Webs - Mods - Extenciones - AppsCell\Apps\1- Dark Box\DarkBox\src\DarkBox.Data\obj\Debug\net8.0\DarkBox.Data.csproj.CoreCompileInputs.cache
+D:\FreezeezyPeak project dream\Games - AppsPC - Webs - Mods - Extenciones - AppsCell\Apps\1- Dark Box\DarkBox\src\DarkBox.Data\obj\Debug\net8.0\DarkBox..EA02A4EA.Up2Date
+D:\FreezeezyPeak project dream\Games - AppsPC - Webs - Mods - Extenciones - AppsCell\Apps\1- Dark Box\DarkBox\src\DarkBox.Data\obj\Debug\net8.0\DarkBox.Data.dll
+D:\FreezeezyPeak project dream\Games - AppsPC - Webs - Mods - Extenciones - AppsCell\Apps\1- Dark Box\DarkBox\src\DarkBox.Data\obj\Debug\net8.0\refint\DarkBox.Data.dll
+D:\FreezeezyPeak project dream\Games - AppsPC - Webs - Mods - Extenciones - AppsCell\Apps\1- Dark Box\DarkBox\src\DarkBox.Data\obj\Debug\net8.0\DarkBox.Data.pdb
+D:\FreezeezyPeak project dream\Games - AppsPC - Webs - Mods - Extenciones - AppsCell\Apps\1- Dark Box\DarkBox\src\DarkBox.Data\obj\Debug\net8.0\ref\DarkBox.Data.dll

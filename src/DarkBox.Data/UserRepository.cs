@@ -142,6 +142,122 @@ public sealed class UserRepository
         }
     }
 
+    public async Task<IReadOnlyList<VaultSummary>> GetVaultsAsync(CancellationToken cancellationToken = default)
+    {
+        await using var connection = _database.OpenConnection();
+        await using var command = connection.CreateCommand();
+        command.CommandText = @"
+            SELECT u.id,
+                   u.username,
+                   (SELECT COUNT(*) FROM vault_items v WHERE v.user_id = u.id) AS item_count,
+                   CASE WHEN u.id = (SELECT MIN(id) FROM users) THEN 1 ELSE 0 END AS is_admin
+            FROM users u
+            ORDER BY u.id;";
+
+        var vaults = new List<VaultSummary>();
+        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+
+        while (await reader.ReadAsync(cancellationToken))
+        {
+            vaults.Add(new VaultSummary(
+                reader.GetInt64(0),
+                reader.GetString(1),
+                reader.GetInt32(2),
+                reader.GetInt32(3) == 1));
+        }
+
+        return vaults;
+    }
+
+    public async Task<bool> IsAdminAsync(VaultSession session, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(session);
+        var adminId = await GetAdminUserIdAsync(cancellationToken);
+        return adminId == session.UserId;
+    }
+
+    public async Task<string?> RenameAsync(
+        VaultSession session,
+        long userId,
+        string newUsername,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(session);
+
+        var username = (newUsername ?? string.Empty).Trim();
+        var usernameError = AccountPolicy.ValidateUsername(username);
+        if (usernameError is not null)
+            return usernameError;
+
+        if (!await CanManageAsync(session, userId, cancellationToken))
+            return "No tienes permiso para renombrar esta bóveda.";
+
+        await using var connection = _database.OpenConnection();
+        await using var command = connection.CreateCommand();
+        command.CommandText = @"
+            UPDATE users
+            SET username = @username, updated_utc = @updatedUtc
+            WHERE id = @id;";
+        command.Parameters.AddWithValue("@username", username);
+        command.Parameters.AddWithValue("@updatedUtc", DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture));
+        command.Parameters.AddWithValue("@id", userId);
+
+        try
+        {
+            var affected = await command.ExecuteNonQueryAsync(cancellationToken);
+            return affected == 1 ? null : "La bóveda no existe.";
+        }
+        catch (SqliteException exception) when (exception.SqliteErrorCode == 19)
+        {
+            return "El nombre de usuario ya existe.";
+        }
+    }
+
+    public async Task<string?> DeleteAsync(
+        VaultSession session,
+        long userId,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(session);
+
+        var adminId = await GetAdminUserIdAsync(cancellationToken);
+        if (userId == adminId)
+            return "No se puede eliminar la bóveda principal.";
+
+        var isAdminSession = session.UserId == adminId;
+        if (!isAdminSession && session.UserId != userId)
+            return "No tienes permiso para eliminar esta bóveda.";
+
+        await using var connection = _database.OpenConnection();
+        await using var command = connection.CreateCommand();
+        command.CommandText = "DELETE FROM users WHERE id = @id;";
+        command.Parameters.AddWithValue("@id", userId);
+
+        var affected = await command.ExecuteNonQueryAsync(cancellationToken);
+        return affected == 1 ? null : "La bóveda no existe.";
+    }
+
+    private async Task<bool> CanManageAsync(
+        VaultSession session,
+        long userId,
+        CancellationToken cancellationToken)
+    {
+        if (session.UserId == userId)
+            return true;
+
+        var adminId = await GetAdminUserIdAsync(cancellationToken);
+        return session.UserId == adminId;
+    }
+
+    private async Task<long> GetAdminUserIdAsync(CancellationToken cancellationToken)
+    {
+        await using var connection = _database.OpenConnection();
+        await using var command = connection.CreateCommand();
+        command.CommandText = "SELECT COALESCE(MIN(id), 0) FROM users;";
+        var result = await command.ExecuteScalarAsync(cancellationToken);
+        return Convert.ToInt64(result, CultureInfo.InvariantCulture);
+    }
+
     private async Task<UserRecord?> FindByUsernameAsync(
         string username,
         CancellationToken cancellationToken)
