@@ -68,6 +68,12 @@ $env:SELF_CONTAINED = "true"
 .\CompilarExe.bat
 ```
 
+Antes de subir el proyecto a GitHub, ejecuta la limpieza para borrar `dist`, `bin`, `obj`, `TestResults` y `.vs` (el `.gitignore` ya los excluye, pero así el equipo queda limpio):
+
+```powershell
+.\LimpiarParaGitHub.bat
+```
+
 ## Pruebas
 
 ```powershell
