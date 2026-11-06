@@ -5,17 +5,18 @@ namespace DarkBox.App.Services;
 
 public sealed class ClipboardService : IDisposable
 {
-    private static readonly TimeSpan ClearAfter = TimeSpan.FromSeconds(30);
-
     private readonly DispatcherTimer _timer;
     private string? _copiedText;
     private bool _disposed;
 
     public ClipboardService()
     {
-        _timer = new DispatcherTimer { Interval = ClearAfter };
+        ClearAfter = TimeSpan.FromSeconds(30);
+        _timer = new DispatcherTimer();
         _timer.Tick += (_, _) => ClearIfOwned();
     }
+
+    public TimeSpan ClearAfter { get; set; }
 
     public bool Copy(string text)
     {
@@ -27,6 +28,7 @@ public sealed class ClipboardService : IDisposable
             Clipboard.SetText(text);
             _copiedText = text;
             _timer.Stop();
+            _timer.Interval = ClearAfter;
             _timer.Start();
             return true;
         }
@@ -64,7 +66,7 @@ public sealed class ClipboardService : IDisposable
         if (_disposed)
             return;
 
-        _timer.Stop();
+        ClearIfOwned();
         _disposed = true;
     }
 }
