@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>DarkBox</AssemblyName>
+    <ApplicationIcon>..\..\Resources\_FreezeezyPeakIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DarkBox.Core\DarkBox.Core.csproj" />
+    <ProjectReference Include="..\DarkBox.Data\DarkBox.Data.csproj" />
+    <ProjectReference Include="..\DarkBox.Export\DarkBox.Export.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="..\..\Resources\logo_freezeezypeak_HD.png" Link="Assets\FreezeezyPeakLogo.png" />
+    <Resource Include="..\..\Resources\DarkBoxLoginClose.png" Link="Assets\DarkBoxLoginClose.png" />
+    <Resource Include="..\..\Resources\DarkBoxLoginOpen.png" Link="Assets\DarkBoxLoginOpen.png" />
+    <Resource Include="..\..\Resources\_FreezeezyPeakIcon.ico" Link="Assets\FreezeezyPeakIcon.ico" />
+  </ItemGroup>
+
+</Project>

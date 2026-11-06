@@ -1,0 +1,607 @@
+﻿<UserControl x:Class="DarkBox.App.Views.VaultView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:behaviors="clr-namespace:DarkBox.App.Behaviors"
+             Loaded="OnLoaded">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0"
+                Background="{StaticResource SurfaceBrush}"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="14"
+                Padding="18,14">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Width="46"
+                            Height="46"
+                            CornerRadius="12"
+                            Background="{StaticResource SurfaceAltBrush}">
+                        <Image Source="pack://application:,,,/DarkBox;component/Assets/FreezeezyPeakLogo.png"
+                               Width="34"
+                               Height="34"
+                               Stretch="Uniform"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                    </Border>
+                    <StackPanel Margin="14,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="DarkBox"
+                                   FontSize="22"
+                                   FontWeight="Bold" />
+                        <TextBlock Text="{Binding Username, StringFormat='Bóveda de {0}'}"
+                                   Foreground="{StaticResource MutedTextBrush}"
+                                   FontSize="13" />
+                    </StackPanel>
+                </StackPanel>
+
+                <Button Grid.Column="1"
+                        Content="Bloquear"
+                        Command="{Binding LockCommand}"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        VerticalAlignment="Center"
+                        Padding="16,9"
+                        FontSize="13" />
+            </Grid>
+        </Border>
+
+        <!-- Contenido principal -->
+        <Grid Grid.Row="1" Margin="0,16,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Lista de credenciales -->
+            <Border Grid.Column="0"
+                    Background="{StaticResource SurfaceBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="14"
+                    Padding="0">
+                <Grid>
+                    <DataGrid ItemsSource="{Binding Items}"
+                              SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                              Visibility="{Binding HasItems, Converter={StaticResource BoolToVisibility}}"
+                              AutoGenerateColumns="False"
+                              GridLinesVisibility="None"
+                              RowBackground="Transparent"
+                              AlternatingRowBackground="{StaticResource SurfaceLightBrush}"
+                              HeadersVisibility="Column"
+                              IsReadOnly="True"
+                              SelectionMode="Single"
+                              SelectionUnit="FullRow"
+                              BorderThickness="0">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Servicio"
+                                               Binding="{Binding Service}"
+                                               Width="2.5*"
+                                               HeaderStyle="{StaticResource ModernDataGridHeader}"
+                                               ElementStyle="{StaticResource ModernDataGridCell}" />
+                            <DataGridTextColumn Header="Usuario"
+                                               Binding="{Binding Username}"
+                                               Width="2.5*"
+                                               HeaderStyle="{StaticResource ModernDataGridHeader}"
+                                               ElementStyle="{StaticResource ModernDataGridCell}" />
+                            <DataGridTemplateColumn Header="Contraseña"
+                                                    Width="2*"
+                                                    HeaderStyle="{StaticResource ModernDataGridHeader}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock TextTrimming="CharacterEllipsis"
+                                                   VerticalAlignment="Center"
+                                                   Style="{StaticResource ModernDataGridCell}">
+                                            <TextBlock.Text>
+                                                <MultiBinding Converter="{StaticResource PasswordDisplay}">
+                                                    <Binding Path="Password" />
+                                                    <Binding Path="DataContext.ArePasswordsVisible"
+                                                             RelativeSource="{RelativeSource AncestorType=DataGrid}" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="URL"
+                                               Binding="{Binding Url}"
+                                               Width="3*"
+                                               HeaderStyle="{StaticResource ModernDataGridHeader}"
+                                               ElementStyle="{StaticResource ModernDataGridCell}" />
+                            <DataGridTextColumn Header="Actualizado"
+                                               Binding="{Binding UpdatedLocalText}"
+                                               Width="1.2*"
+                                               HeaderStyle="{StaticResource ModernDataGridHeader}"
+                                               ElementStyle="{StaticResource ModernDataGridCell}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <StackPanel VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Margin="24"
+                                Visibility="{Binding HasItems, Converter={StaticResource InverseBoolToVisibility}}">
+                        <Image Source="pack://application:,,,/DarkBox;component/Assets/DarkBoxLoginOpen.png"
+                               Width="230"
+                               Height="205"
+                               Stretch="Uniform"
+                               HorizontalAlignment="Center" />
+                        <TextBlock Text="La bóveda está vacía"
+                                   FontSize="20"
+                                   FontWeight="SemiBold"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,16,0,6" />
+                        <TextBlock Text="Crea tu primera credencial para empezar a protegerla."
+                                   Foreground="{StaticResource MutedTextBrush}"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   MaxWidth="340"
+                                   Margin="0,0,0,18" />
+                        <Button Content="Nueva credencial"
+                                Command="{Binding NewItemCommand}"
+                                Padding="18,10"
+                                FontSize="13"
+                                FontWeight="SemiBold"
+                                HorizontalAlignment="Center" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Separador -->
+            <GridSplitter Grid.Column="1"
+                         Width="1"
+                         Margin="14,0"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Stretch"
+                         Background="{StaticResource BorderBrush}"
+                         Visibility="{Binding IsEditorOpen, Converter={StaticResource BoolToVisibility}}"
+                         ShowsPreview="True" />
+
+            <!-- Editor de credenciales -->
+            <Border Grid.Column="2"
+                    Width="390"
+                    Margin="14,0,0,0"
+                    Background="{StaticResource SurfaceBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="14"
+                    Padding="24"
+                    Visibility="{Binding IsEditorOpen, Converter={StaticResource BoolToVisibility}}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                        <TextBlock Text="{Binding EditorTitle}"
+                                   FontSize="19"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,18" />
+
+                        <TextBlock Text="Servicio *"
+                                   FontWeight="SemiBold"
+                                   FontSize="13" />
+                        <TextBox Text="{Binding EditorService, UpdateSourceTrigger=PropertyChanged}"
+                                 MaxLength="256"
+                                 Margin="0,6,0,16"
+                                 Padding="12,9"
+                                 FontSize="14" />
+
+                        <TextBlock Text="Usuario"
+                                   FontWeight="SemiBold"
+                                   FontSize="13" />
+                        <TextBox Text="{Binding EditorUsername, UpdateSourceTrigger=PropertyChanged}"
+                                 MaxLength="512"
+                                 Margin="0,6,0,16"
+                                 Padding="12,9"
+                                 FontSize="14" />
+
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Contraseña *"
+                                       FontWeight="SemiBold"
+                                       FontSize="13"
+                                       VerticalAlignment="Center" />
+                            <Button Content="{Binding EditorPasswordToggleText}"
+                                    Command="{Binding ToggleEditorPasswordVisibilityCommand}"
+                                    Style="{StaticResource LinkButtonStyle}"
+                                    Grid.Column="1"
+                                    Padding="6,0"
+                                    FontSize="12" />
+                        </Grid>
+
+                        <Grid Margin="0,0,0,16">
+                            <PasswordBox behaviors:PasswordBoxHelper.BindPassword="True"
+                                         behaviors:PasswordBoxHelper.BoundPassword="{Binding EditorPassword, Mode=TwoWay}"
+                                         MaxLength="4096"
+                                         Visibility="{Binding IsEditorPasswordVisible, Converter={StaticResource InverseBoolToVisibility}}"
+                                         Padding="12,9"
+                                         FontSize="14" />
+                            <TextBox Text="{Binding EditorPassword, UpdateSourceTrigger=PropertyChanged}"
+                                     MaxLength="4096"
+                                     Visibility="{Binding IsEditorPasswordVisible, Converter={StaticResource BoolToVisibility}}"
+                                     Padding="12,9"
+                                     FontSize="14" />
+                        </Grid>
+
+                        <TextBlock Text="URL"
+                                   FontWeight="SemiBold"
+                                   FontSize="13" />
+                        <TextBox Text="{Binding EditorUrl, UpdateSourceTrigger=PropertyChanged}"
+                                 MaxLength="2048"
+                                 Margin="0,6,0,16"
+                                 Padding="12,9"
+                                 FontSize="14" />
+
+                        <TextBlock Text="Notas"
+                                   FontWeight="SemiBold"
+                                   FontSize="13" />
+                        <TextBox Text="{Binding EditorNotes, UpdateSourceTrigger=PropertyChanged}"
+                                 MaxLength="8000"
+                                 Height="90"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 VerticalContentAlignment="Top"
+                                 VerticalScrollBarVisibility="Auto"
+                                 Margin="0,6,0,24"
+                                 Padding="12,9"
+                                 FontSize="14" />
+
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right">
+                            <Button Content="Cancelar"
+                                    Command="{Binding CancelEditCommand}"
+                                    Style="{StaticResource SecondaryButtonStyle}"
+                                    Padding="20,10"
+                                    FontSize="13"
+                                    Margin="0,0,12,0" />
+                            <Button Content="Guardar"
+                                    Command="{Binding SaveCommand}"
+                                    Padding="20,10"
+                                    FontSize="13" />
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+
+        <!-- Barra de herramientas y mensajes -->
+        <Border Grid.Row="2"
+                Margin="0,16,0,0"
+                Background="{StaticResource SurfaceBrush}"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="14"
+                Padding="18,14">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <WrapPanel Grid.Column="0"
+                               VerticalAlignment="Center">
+                        <Button Content="Nueva Credencial"
+                                Command="{Binding NewItemCommand}"
+                                IsEnabled="{Binding IsNotBusy}"
+                                Padding="16,10"
+                                FontSize="13"
+                                FontWeight="SemiBold"
+                                Margin="0,0,12,0" />
+
+                        <Button Content="Editar Seleccionada"
+                                Command="{Binding EditSelectedCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                IsEnabled="{Binding IsNotBusy}"
+                                Padding="16,10"
+                                FontSize="13"
+                                Margin="0,0,12,0" />
+
+                        <Button Content="Eliminar"
+                                Command="{Binding DeleteSelectedCommand}"
+                                Style="{StaticResource DangerButtonStyle}"
+                                IsEnabled="{Binding IsNotBusy}"
+                                Padding="16,10"
+                                FontSize="13" />
+                    </WrapPanel>
+
+                    <WrapPanel Grid.Column="1"
+                               VerticalAlignment="Center">
+                        <Button Content="Copiar Usuario"
+                                Command="{Binding CopyUsernameCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                IsEnabled="{Binding IsNotBusy}"
+                                Padding="12,9"
+                                FontSize="12"
+                                Margin="0,0,8,0" />
+
+                        <Button Content="Copiar Contraseña"
+                                Command="{Binding CopyPasswordCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                IsEnabled="{Binding IsNotBusy}"
+                                Padding="12,9"
+                                FontSize="12"
+                                Margin="0,0,8,0" />
+
+                        <Button Content="{Binding PasswordVisibilityButtonText}"
+                                Command="{Binding TogglePasswordVisibilityCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                IsEnabled="{Binding IsNotBusy}"
+                                Padding="12,9"
+                                FontSize="12"
+                                Margin="0,0,8,0" />
+
+                        <Button Content="Exportar PDF"
+                                Command="{Binding ExportAllToPdfCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                IsEnabled="{Binding IsNotBusy}"
+                                Padding="12,9"
+                                FontSize="12"
+                                Margin="0,0,8,0" />
+
+                        <Button Content="Exportar .darkbox"
+                                Command="{Binding ExportVaultToDarkBoxCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                IsEnabled="{Binding IsNotBusy}"
+                                Padding="12,9"
+                                FontSize="12"
+                                Margin="0,0,8,0" />
+
+                        <Button Content="Importar .darkbox"
+                                Command="{Binding ImportVaultFromDarkBoxCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                IsEnabled="{Binding IsNotBusy}"
+                                Padding="12,9"
+                                FontSize="12"
+                                Margin="0,0,8,0" />
+
+                        <Button Content="Cuentas"
+                                Command="{Binding OpenVaultManagerCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                IsEnabled="{Binding IsNotBusy}"
+                                Padding="12,9"
+                                FontSize="12"
+                                Margin="0,0,8,0" />
+
+                        <Button Content="Ajustes"
+                                Command="{Binding OpenSettingsCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                IsEnabled="{Binding IsNotBusy}"
+                                Padding="12,9"
+                                FontSize="12" />
+                    </WrapPanel>
+                </Grid>
+
+                <StackPanel Grid.Row="1" Margin="0,12,0,0">
+                    <TextBlock Text="{Binding StatusMessage}"
+                               Visibility="{Binding StatusMessage, Converter={StaticResource NotEmptyToVisibility}}"
+                               Foreground="{StaticResource SuccessBrush}"
+                               FontSize="13"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,4" />
+
+                    <TextBlock Text="{Binding ErrorMessage}"
+                               Visibility="{Binding ErrorMessage, Converter={StaticResource NotEmptyToVisibility}}"
+                               Foreground="{StaticResource DangerBrush}"
+                               FontSize="13"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Ajustes -->
+        <Border Grid.Row="0"
+                Grid.RowSpan="3"
+                Background="#B315161A"
+                Visibility="{Binding IsSettingsOpen, Converter={StaticResource BoolToVisibility}}">
+            <Border Width="430"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Background="{StaticResource SurfaceBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="14"
+                    Padding="24">
+                <StackPanel>
+                    <TextBlock Text="Ajustes"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Margin="0,0,0,16" />
+
+                    <TextBlock Text="Segundos para borrar el portapapeles (5-300)"
+                               FontSize="13"
+                               Margin="0,0,0,6" />
+                    <TextBox Text="{Binding SettingClipboardSecondsText, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,14"
+                             Padding="10,8"
+                             FontSize="13" />
+
+                    <TextBlock Text="Auto-bloqueo en minutos (0 = desactivado, máx. 240)"
+                               FontSize="13"
+                               Margin="0,0,0,6" />
+                    <TextBox Text="{Binding SettingAutoLockMinutesText, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,14"
+                             Padding="10,8"
+                             FontSize="13" />
+
+                    <CheckBox Content="Pedir confirmación antes de eliminar"
+                              IsChecked="{Binding SettingConfirmBeforeDelete}"
+                              Foreground="{StaticResource TextBrush}"
+                              FontSize="13"
+                              Margin="0,0,0,18" />
+
+                    <TextBlock Text="{Binding ErrorMessage}"
+                               Foreground="{StaticResource DangerBrush}"
+                               TextWrapping="Wrap"
+                               Visibility="{Binding ErrorMessage, Converter={StaticResource NotEmptyToVisibility}}"
+                               Margin="0,0,0,12"
+                               FontSize="12" />
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right">
+                        <Button Content="Cancelar"
+                                Command="{Binding CloseSettingsCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                Padding="18,9"
+                                FontSize="13"
+                                Margin="0,0,10,0" />
+                        <Button Content="Guardar"
+                                Command="{Binding SaveSettingsCommand}"
+                                Padding="18,9"
+                                FontSize="13" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Border>
+
+        <!-- Gestión de bóvedas -->
+        <Border Grid.Row="0"
+                Grid.RowSpan="3"
+                Background="#B315161A"
+                Visibility="{Binding IsVaultManagerOpen, Converter={StaticResource BoolToVisibility}}">
+            <Border Width="580"
+                    MaxHeight="540"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Background="{StaticResource SurfaceBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="14"
+                    Padding="22">
+                <DockPanel LastChildFill="True">
+                    <TextBlock Text="Bóvedas"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               DockPanel.Dock="Top" />
+                    <TextBlock Text="La primera bóveda es la administradora. Las secundarias solo pueden renombrarse o eliminarse a sí mismas."
+                               Foreground="{StaticResource MutedTextBrush}"
+                               FontSize="12"
+                               TextWrapping="Wrap"
+                               Margin="0,6,0,14"
+                               DockPanel.Dock="Top" />
+
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled">
+                        <ItemsControl ItemsSource="{Binding Vaults}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="{StaticResource BorderBrush}"
+                                            BorderThickness="0,0,0,1"
+                                            Padding="0,12">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Column="0"
+                                                        VerticalAlignment="Center">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding Username}"
+                                                               FontWeight="SemiBold"
+                                                               FontSize="14" />
+                                                    <Border Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVisibility}}"
+                                                            Background="{StaticResource AccentBrush}"
+                                                            CornerRadius="8"
+                                                            Padding="6,2"
+                                                            Margin="8,0,0,0">
+                                                        <TextBlock Text="Admin"
+                                                                   Foreground="White"
+                                                                   FontSize="10"
+                                                                   FontWeight="SemiBold" />
+                                                    </Border>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal"
+                                                            Margin="0,2,0,0">
+                                                    <TextBlock Text="{Binding ItemCount}"
+                                                               Foreground="{StaticResource MutedTextBrush}"
+                                                               FontSize="11" />
+                                                    <TextBlock Text=" credencial(es)"
+                                                               Foreground="{StaticResource MutedTextBrush}"
+                                                               FontSize="11" />
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <StackPanel Grid.Column="1"
+                                                        Orientation="Horizontal"
+                                                        VerticalAlignment="Center"
+                                                        Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibility}}">
+                                                <TextBox Text="{Binding EditUsername, UpdateSourceTrigger=PropertyChanged}"
+                                                         MaxLength="32"
+                                                         Width="180"
+                                                         Margin="0,0,8,0"
+                                                         Padding="8,6"
+                                                         FontSize="12" />
+                                                <Button Content="OK"
+                                                        Command="{Binding DataContext.SaveRenameVaultCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                        CommandParameter="{Binding}"
+                                                        Padding="12,7"
+                                                        FontSize="12"
+                                                        Margin="0,0,6,0" />
+                                                <Button Content="Cancelar"
+                                                        Command="{Binding DataContext.CancelRenameVaultCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                        CommandParameter="{Binding}"
+                                                        Style="{StaticResource SecondaryButtonStyle}"
+                                                        Padding="12,7"
+                                                        FontSize="12" />
+                                            </StackPanel>
+
+                                            <StackPanel Grid.Column="1"
+                                                        Orientation="Horizontal"
+                                                        VerticalAlignment="Center"
+                                                        Visibility="{Binding IsEditing, Converter={StaticResource InverseBoolToVisibility}}">
+                                                <Button Content="Renombrar"
+                                                        Command="{Binding DataContext.StartRenameVaultCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                        CommandParameter="{Binding}"
+                                                        Style="{StaticResource SecondaryButtonStyle}"
+                                                        IsEnabled="{Binding CanRename}"
+                                                        Padding="12,7"
+                                                        FontSize="12"
+                                                        Margin="0,0,8,0" />
+                                                <Button Content="Eliminar"
+                                                        Command="{Binding DataContext.DeleteVaultCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                        CommandParameter="{Binding}"
+                                                        Style="{StaticResource DangerButtonStyle}"
+                                                        IsEnabled="{Binding CanDelete}"
+                                                        Padding="12,7"
+                                                        FontSize="12" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                    <StackPanel DockPanel.Dock="Bottom"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                Margin="0,14,0,0">
+                        <Button Content="Cerrar"
+                                Command="{Binding CloseVaultManagerCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                Padding="18,9"
+                                FontSize="13" />
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+        </Border>
+    </Grid>
+</UserControl>
