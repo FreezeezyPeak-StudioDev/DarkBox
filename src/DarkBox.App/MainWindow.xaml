@@ -6,15 +6,17 @@
         xmlns:views="clr-namespace:DarkBox.App.Views"
         xmlns:vm="clr-namespace:DarkBox.App.ViewModels"
         mc:Ignorable="d"
-        Title="DarkBox"
+        Title="DarkBox · FreezeezyPeak"
         Height="720"
         Width="1100"
         MinHeight="540"
         MinWidth="820"
         WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        ResizeMode="CanResizeWithGrip"
         UseLayoutRounding="True"
         Background="{StaticResource BackgroundBrush}"
-        Icon="pack://application:,,,/DarkBox;component/Assets/DarkBoxIcon.ico">
+        Icon="pack://application:,,,/DarkBox;component/Assets/FreezeezyPeakIcon.ico">
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:UnlockViewModel}">
             <views:UnlockView />
@@ -24,5 +26,52 @@
         </DataTemplate>
     </Window.Resources>
 
-    <ContentControl Content="{Binding CurrentViewModel}" />
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="42" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                Background="{StaticResource SurfaceBrush}"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="0,0,0,1"
+                MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+            <Grid>
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            Margin="14,0,0,0">
+                    <Image Source="pack://application:,,,/DarkBox;component/Assets/FreezeezyPeakLogo.png"
+                           Width="22"
+                           Height="22"
+                           Stretch="Uniform" />
+                    <TextBlock Text="DarkBox · FreezeezyPeak"
+                               FontWeight="SemiBold"
+                               FontSize="13"
+                               Margin="10,0,0,0"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center">
+                    <Button Content="—"
+                            Style="{StaticResource CaptionButtonStyle}"
+                            Click="MinimizeButton_Click" />
+                    <Button x:Name="MaximizeButton"
+                            Content="□"
+                            Style="{StaticResource CaptionButtonStyle}"
+                            Click="MaximizeButton_Click" />
+                    <Button Content="✕"
+                            Style="{StaticResource CaptionCloseButtonStyle}"
+                            Click="CloseButton_Click" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <ContentControl Grid.Row="1"
+                        Content="{Binding CurrentViewModel}"
+                        HorizontalContentAlignment="Stretch"
+                        VerticalContentAlignment="Stretch" />
+    </Grid>
 </Window>

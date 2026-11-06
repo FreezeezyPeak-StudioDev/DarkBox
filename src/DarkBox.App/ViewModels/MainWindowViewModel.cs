@@ -11,6 +11,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
     private readonly VaultRepository _vault;
     private readonly ClipboardService _clipboard;
     private readonly DialogService _dialogs;
+    private readonly SettingsService _settings;
     private bool _initialized;
     private bool _disposed;
 
@@ -21,12 +22,14 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
         UserRepository users,
         VaultRepository vault,
         ClipboardService clipboard,
-        DialogService dialogs)
+        DialogService dialogs,
+        SettingsService settings)
     {
         _users = users;
         _vault = vault;
         _clipboard = clipboard;
         _dialogs = dialogs;
+        _settings = settings;
     }
 
     public async Task<bool> InitializeAsync()
@@ -61,9 +64,11 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
     {
         var vaultViewModel = new VaultViewModel(
             session,
+            _users,
             _vault,
             _clipboard,
             _dialogs,
+            _settings,
             OnLocked);
 
         CurrentViewModel = vaultViewModel;

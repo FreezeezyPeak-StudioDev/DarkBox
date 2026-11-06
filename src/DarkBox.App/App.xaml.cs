@@ -34,10 +34,14 @@ public partial class App : Application
 
             var users = new UserRepository(database);
             var vault = new VaultRepository(database);
-            _clipboard = new ClipboardService();
+            var settings = new SettingsService();
+            _clipboard = new ClipboardService
+            {
+                ClearAfter = TimeSpan.FromSeconds(settings.Settings.ClipboardSeconds),
+            };
             var dialogs = new DialogService();
 
-            _mainViewModel = new MainWindowViewModel(users, vault, _clipboard, dialogs);
+            _mainViewModel = new MainWindowViewModel(users, vault, _clipboard, dialogs, settings);
 
             if (!await _mainViewModel.InitializeAsync())
             {
